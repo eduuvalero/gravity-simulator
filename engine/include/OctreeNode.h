@@ -2,6 +2,7 @@
 #define OCTREE_H
 
 #include <memory>
+#include <vector>
 #include <array>
 #include <iostream>
 
@@ -14,13 +15,15 @@ class OctreeNode {
         void insert(Body* body);
         void print(int depth = 0) const;
 
-        Vector3d centerOfMass_{0, 0, 0};
-        double totalMass_ = 0.0;
-
     private:
         Vector3d center_;
-        double halfWidth_;
-        Body* body_ = nullptr;
+        const double halfWidth_;
+        const Vector3d centerOfMass_{0, 0, 0};
+        double totalMass_ = 0.0;
+
+        std::vector<Body*> bodies_;
+        static constexpr int CAPACITY = 8;
+
         std::array<std::unique_ptr<OctreeNode>, 8> children_;
         static constexpr double MIN_HALFWIDTH = 1e-6;
 
@@ -38,17 +41,15 @@ class OctreeNode {
         }
 
         void subdivide() {
-            double quarter = halfWidth_ / 2.0;
+            double quarter = halfWidth_ * 0.5;
             for (int i = 0; i < 8; ++i) {
                 Vector3d offset{
                     (i & 1) ? quarter : -quarter,
                     (i & 2) ? quarter : -quarter,
                     (i & 4) ? quarter : -quarter
                 };
-                children_[i] = std::make_unique<OctreeNode>(
-                    Vector3d{center_.x + offset.x, center_.y + offset.y, center_.z + offset.z},
-                    quarter
-                );
+
+                children_[i] = std::make_unique<OctreeNode>(Vector3d{center_.x + offset.x, center_.y + offset.y, center_.z + offset.z}, quarter);
             }
         }
 };
