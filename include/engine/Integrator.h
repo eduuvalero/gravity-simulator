@@ -1,6 +1,4 @@
-#ifndef INTEGRATOR_H
-#define INTEGRATOR_H
-
+#pragma once
 #include <vector>
 
 #include "Body.h"
@@ -12,5 +10,3 @@ class Integrator{
         void kick(std::vector<Body*>& bodies_, double dt);
         void drift(std::vector<Body*>& bodies_, double dt);
 };
-
-#endif

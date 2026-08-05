@@ -1,4 +1,5 @@
-#include "../include/OctreeNode.h"
+#include "engine/OctreeNode.h"
+#include "config/config.h"
 
 int OctreeNode::getOctant(const Vector3d& pos) const {
     int oct = 0;
@@ -35,12 +36,12 @@ void OctreeNode::insert(Body* body){
     centerOfMass_ = (centerOfMass_ * oldMass + body->position * body->mass) / totalMass_;
 
     if(isLeaf()){
-        if(bodies_.size() < config::CAPACITY){
+        if(bodies_.size() < Config::octree.capacity){
             bodies_.push_back(body);
             return;
         }
 
-        if (halfWidth_ <= config::MINHALFWIDTH)
+        if (halfWidth_ <= Config::octree.minimumHalfWidth)
         {
             bodies_.push_back(body);
             return;

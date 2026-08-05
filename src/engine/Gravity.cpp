@@ -1,13 +1,14 @@
-#include "../include/Gravity.h"
+#include "engine/Gravity.h"
+#include "config/config.h"
 
 #include <cmath>
 
 Vector3d Gravity::calculateForceFromMass(Body* body, double mass, const Vector3d& position){
     Vector3d direction = position - body->position;
 
-    double distanceSq = direction.normSq() + config::SOFTENING * config::SOFTENING;;
+    double distanceSq = direction.normSq() + Config::physics.softening * Config::physics.softening;
 
-    double factor = config::G * mass / (distanceSq * std::sqrt(distanceSq));
+    double factor = Config::physics.gravitationalConstant * mass / (distanceSq * std::sqrt(distanceSq));
 
     return direction * factor;
 }
@@ -21,7 +22,7 @@ bool Gravity::shouldApproximate(Body* body, OctreeNode* node){
 
     double size = node->getHalfWidth() * 2.0;
 
-    return (size / distance) < config::THETA;
+    return (size / distance) < Config::physics.barnesHutTheta;
 };
 
 Vector3d Gravity::barnesHut(Body* body, OctreeNode* node){

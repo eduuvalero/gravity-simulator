@@ -1,5 +1,4 @@
-#ifndef PHYSICS_H
-#define PHYSICS_H
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -23,5 +22,3 @@ class Physics{
         void addBody(Body* body);
         void step(double dt);
 };
-
-#endif

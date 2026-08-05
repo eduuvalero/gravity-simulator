@@ -1,5 +1,4 @@
-#ifndef BODY_H
-#define BODY_H
+#pragma once
 
 #include <cmath>
 #include <iostream>
@@ -43,7 +42,7 @@ struct Vector3d{
         return dot(*this); 
     }
 
-    constexpr double norm() const { 
+    double norm() const { 
         return std::sqrt(normSq()); 
     }
 
@@ -72,5 +71,3 @@ struct Body{
     Vector3d velocity;
     Vector3d acceleration;
 };
-
-#endif

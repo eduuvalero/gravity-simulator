@@ -1,5 +1,4 @@
-#ifndef OCTREE_H
-#define OCTREE_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -7,7 +6,6 @@
 #include <iostream>
 
 #include "Body.h"
-#include "Config.h"
 
 class OctreeNode {
     private:
@@ -55,5 +53,3 @@ class OctreeNode {
             return true;
         }
 };
-
-#endif

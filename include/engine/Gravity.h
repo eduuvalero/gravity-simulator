@@ -1,8 +1,6 @@
-#ifndef GRAVITY_H
-#define GRAVITY_H
+#pragma once
 
 #include "Body.h"
-#include "Config.h"
 #include "OctreeNode.h"
 
 class Gravity{
@@ -19,5 +17,3 @@ class Gravity{
             return barnesHut(body, root);
         };
 };
-
-#endif

@@ -1,4 +1,4 @@
-#include "../include/Integrator.h"
+#include "engine/Integrator.h"
 
 void Integrator::kick(std::vector<Body*>& bodies, double dt){
     for (Body* body : bodies){

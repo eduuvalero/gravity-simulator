@@ -1,10 +1,14 @@
 #include <iostream>
 
-#include "../include/Physics.h"
-#include "../include/Body.h"
+#include "engine/Physics.h"
+#include "engine/Body.h"
 
-int main()
-{
+#include "config/Config.h"
+
+using namespace std;
+
+int main(){
+    Config::load("config/config.json");
     Physics physics;
 
     Body sun;
@@ -28,7 +32,9 @@ int main()
 
     constexpr double dt = 0.01;
 
-    for (int i = 0; i < 10000000; ++i)
+    for (int i = 0; i < 1000; ++i){
         physics.step(dt);
+        cout << "Step " << i << ": Earth position: " << earth.position << ", Moon position: " << moon.position << std::endl;
+    }
     return 0;
 }
