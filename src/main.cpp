@@ -32,7 +32,7 @@ int main(){
 
     constexpr double dt = 0.01;
 
-    for (int i = 0; i < 1000; ++i){
+    for (int i = 0; i < 1000000; ++i){
         physics.step(dt);
         cout << "Step " << i << ": Earth position: " << earth.position << ", Moon position: " << moon.position << std::endl;
     }

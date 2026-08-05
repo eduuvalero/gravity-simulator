@@ -56,3 +56,20 @@ target_link_libraries(GravitySimulator PRIVATE
     glfw
     OpenGL::GL
 )
+
+if(MSVC)
+    target_compile_options(GravitySimulator PRIVATE
+        $<$<CONFIG:Debug>:/Od>
+        $<$<CONFIG:Release>:/O2>
+    )
+else()
+    target_compile_options(GravitySimulator PRIVATE
+        $<$<CONFIG:Debug>:-O0 -g>
+        $<$<CONFIG:Release>:-O3 -march=native>
+        $<$<CONFIG:RelWithDebInfo>:-O2 -g>
+    )
+endif()
+
+set_target_properties(GravitySimulator PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
