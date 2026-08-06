@@ -36,7 +36,7 @@ void Physics::computeAccelerations(){
         return;
     }
 
-#pragma omp parallel for schedule(dynamic)
+    #pragma omp parallel for schedule(dynamic)
     for (std::size_t i = 0; i < bodies_.size(); ++i) {
         bodies_[i]->acceleration = gravity_.calculateAcceleration(bodies_[i], root_.get());
     }
