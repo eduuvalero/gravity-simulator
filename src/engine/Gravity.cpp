@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-Vector3d Gravity::calculateForceFromMass(Body* body, double mass, const Vector3d& position){
+Vector3d Gravity::calculateAccelerationFromMass(Body* body, double mass, const Vector3d& position){
     Vector3d direction = position - body->position;
 
     double distanceSq = direction.normSq() + Config::physics.softening * Config::physics.softening;
@@ -13,8 +13,8 @@ Vector3d Gravity::calculateForceFromMass(Body* body, double mass, const Vector3d
     return direction * factor;
 }
 
-Vector3d Gravity::calculateForceBetweenBodies(Body* a, Body* b){
-    return calculateForceFromMass(a, b->mass, b->position);
+Vector3d Gravity::calculateAccelerationBetweenBodies(Body* a, Body* b){
+    return calculateAccelerationFromMass(a, b->mass, b->position);
 }
 
 bool Gravity::shouldApproximate(Body* body, OctreeNode* node){
@@ -22,7 +22,7 @@ bool Gravity::shouldApproximate(Body* body, OctreeNode* node){
 
     double size = node->getHalfWidth() * 2.0;
 
-    return (size / distance) < Config::physics.barnesHutTheta;
+    return (distance > 0 ? (size / distance) < Config::physics.barnesHutTheta : false);
 };
 
 Vector3d Gravity::barnesHut(Body* body, OctreeNode* node){
@@ -35,7 +35,7 @@ Vector3d Gravity::barnesHut(Body* body, OctreeNode* node){
     if(node->isLeaf()){
         for(Body* other : node->getBodies()){
             if(other != body){
-                acceleration += calculateForceBetweenBodies(body, other);
+                acceleration += calculateAccelerationBetweenBodies(body, other);
             }
         }
 
@@ -43,7 +43,7 @@ Vector3d Gravity::barnesHut(Body* body, OctreeNode* node){
     }
 
     if(shouldApproximate(body, node)){
-        return calculateForceFromMass(body, node->getTotalMass(), node->getCenterOfMass());
+        return calculateAccelerationFromMass(body, node->getTotalMass(), node->getCenterOfMass());
     }
 
     for(const auto& child : node->getChildren()){

@@ -12,8 +12,7 @@ PhysicsConfig Config::physics;
 OctreeConfig Config::octree;
 RenderConfig Config::render;
 
-void Config::load(const std::string& path)
-{
+void Config::load(const std::string& path){
     std::ifstream file(path);
 
     if (!file.is_open())
@@ -22,30 +21,21 @@ void Config::load(const std::string& path)
     json j;
     file >> j;
 
-    simulation.dt =
-        j.at("simulation").at("dt").get<double>();
+    simulation.dt = j.at("simulation").at("dt").get<double>();
 
-    physics.gravitationalConstant =
-        j.at("physics").at("gravitationalConstant").get<double>();
+    physics.gravitationalConstant = j.at("physics").at("gravitationalConstant").get<double>();
 
-    physics.softening =
-        j.at("physics").at("softening").get<double>();
+    physics.softening =j.at("physics").at("softening").get<double>();
 
-    physics.barnesHutTheta =
-        j.at("physics").at("barnesHutTheta").get<double>();
+    physics.barnesHutTheta = j.at("physics").at("barnesHutTheta").get<double>();
 
-    octree.capacity =
-        j.at("octree").at("capacity").get<int>();
+    octree.capacity = j.at("octree").at("capacity").get<int>();
 
-    octree.minimumHalfWidth =
-        j.at("octree").at("minimumHalfWidth").get<double>();
+    octree.minimumHalfWidth = j.at("octree").at("minimumHalfWidth").get<double>();
 
-    render.width =
-        j.at("render").at("width").get<int>();
+    render.width = j.at("render").at("width").get<int>();
 
-    render.height =
-        j.at("render").at("height").get<int>();
+    render.height = j.at("render").at("height").get<int>();
 
-    render.vsync =
-        j.at("render").at("vsync").get<bool>();
+    render.vsync = j.at("render").at("vsync").get<bool>();
 }
