@@ -7,7 +7,7 @@
 #include "Vector3d.h"
 
 enum BodyType{
-    Star, Planet, Moon, Asteroid
+    Star, Planet
 };
 
 struct Body{

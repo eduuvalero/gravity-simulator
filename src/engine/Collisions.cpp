@@ -98,16 +98,6 @@ namespace Collisions{
             return;
         }
 
-        if (a.type == Asteroid && b.type != Asteroid){
-            a.alive = false;
-            return;
-        }
-
-        if (b.type == Asteroid && a.type != Asteroid){
-            b.alive = false;
-            return;
-        }
-
         elasticCollision(a, b);
     }
 };
