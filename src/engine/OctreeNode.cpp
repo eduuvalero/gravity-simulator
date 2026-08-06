@@ -1,5 +1,5 @@
 #include "engine/OctreeNode.h"
-#include "config/config.h"
+#include "config/Config.h"
 
 int OctreeNode::getOctant(const Vector3d& pos) const {
     int oct = 0;

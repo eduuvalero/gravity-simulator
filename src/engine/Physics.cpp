@@ -7,6 +7,11 @@ void Physics::addBody(Body* body){
 }
 
 void Physics::buildTree(){
+    if (bodies_.empty()) {
+        root_.reset();
+        return;
+    }
+
     Vector3d min = bodies_[0]->position;
     Vector3d max = bodies_[0]->position;
 
@@ -17,6 +22,7 @@ void Physics::buildTree(){
 
     Vector3d center = (min + max) / 2.0;
     double size = std::max({max.x - min.x, max.y - min.y, max.z - min.z}) * 0.5;
+    size = std::max(size, 1e-6);
 
     root_ = std::make_unique<OctreeNode>(center, size);
 
@@ -26,8 +32,13 @@ void Physics::buildTree(){
 }
 
 void Physics::computeAccelerations(){
-    for (Body* body : bodies_){
-        body->acceleration = gravity_.calculateAcceleration(body, root_.get());
+    if (!root_) {
+        return;
+    }
+
+#pragma omp parallel for schedule(dynamic)
+    for (std::size_t i = 0; i < bodies_.size(); ++i) {
+        bodies_[i]->acceleration = gravity_.calculateAcceleration(bodies_[i], root_.get());
     }
 }
 

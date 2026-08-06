@@ -30,7 +30,7 @@ int main(){
     physics.addBody(&earth);
     physics.addBody(&moon);
 
-    constexpr double dt = 0.01;
+    const double dt = Config::simulation.dt;
 
     for (int i = 0; i < 1000000; ++i){
         physics.step(dt);

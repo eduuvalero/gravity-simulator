@@ -39,4 +39,13 @@ void Config::load(const std::string& path)
 
     octree.minimumHalfWidth =
         j.at("octree").at("minimumHalfWidth").get<double>();
+
+    render.width =
+        j.at("render").at("width").get<int>();
+
+    render.height =
+        j.at("render").at("height").get<int>();
+
+    render.vsync =
+        j.at("render").at("vsync").get<bool>();
 }

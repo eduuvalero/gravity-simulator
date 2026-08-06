@@ -50,12 +50,17 @@ FetchContent_MakeAvailable(
 )
 
 find_package(OpenGL REQUIRED)
+find_package(OpenMP)
 
 target_link_libraries(GravitySimulator PRIVATE
     nlohmann_json::nlohmann_json
     glfw
     OpenGL::GL
 )
+
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(GravitySimulator PRIVATE OpenMP::OpenMP_CXX)
+endif()
 
 if(MSVC)
     target_compile_options(GravitySimulator PRIVATE

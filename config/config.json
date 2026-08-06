@@ -12,5 +12,11 @@
     "octree": {
         "capacity": 4,
         "minimumHalfWidth": 1e-6
+    },
+
+    "render": {
+        "width": 1280,
+        "height": 720,
+        "vsync": true
     }
 }

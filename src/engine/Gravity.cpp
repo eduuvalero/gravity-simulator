@@ -1,5 +1,5 @@
 #include "engine/Gravity.h"
-#include "config/config.h"
+#include "config/Config.h"
 
 #include <cmath>
 
