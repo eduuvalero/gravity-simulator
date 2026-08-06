@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "Body.h"
+#include "Vector3d.h"
 
 class OctreeNode {
     private:
