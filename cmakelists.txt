@@ -13,6 +13,7 @@ add_executable(GravitySimulator
     src/engine/Gravity.cpp
     src/engine/Integrator.cpp
     src/engine/OctreeNode.cpp
+    src/engine/Collisions.cpp
     src/engine/Physics.cpp
 
     src/config/Config.cpp

@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+#include "engine/Collisions.h"
+
 void Physics::addBody(Body* body){
     bodies_.push_back(body);
 }
@@ -42,6 +44,43 @@ void Physics::computeAccelerations(){
     }
 }
 
+void Physics::checkCollisions(){
+    for (Body* body : bodies_){
+        if (!body->alive)
+            continue;
+
+        std::vector<Body*> nearby;
+
+        root_->querySphere(body->position, body->radius, nearby);
+
+
+        for (Body* other : nearby){
+            if (body == other)
+                continue;
+
+            if (body > other)
+                continue;
+
+            if (!other->alive)
+                continue;
+
+            if (Collisions::checkCollision(*body, *other)){
+                Collisions::resolveCollision(*body, *other);
+            }
+        }
+    }
+}
+
+void Physics::removeDeadBodies(){
+        bodies_.erase(
+        std::remove_if(bodies_.begin(), bodies_.end(), [](Body* body){
+                return !body->alive;
+            }
+        ),
+        bodies_.end()
+    );
+};
+
 void Physics::step(double dt){
     if(firstStep_){
         firstStep_ = false;
@@ -56,4 +95,7 @@ void Physics::step(double dt){
 
     computeAccelerations();
     integrator_.kick(bodies_, dt);
+
+    checkCollisions();
+    removeDeadBodies();
 };

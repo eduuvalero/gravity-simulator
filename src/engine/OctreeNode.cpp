@@ -1,6 +1,8 @@
 #include "engine/OctreeNode.h"
 #include "config/Config.h"
 
+#include <algorithm>
+
 int OctreeNode::getOctant(const Vector3d& pos) const {
     int oct = 0;
     if (pos.x > center_.x) oct |= 1;
@@ -104,5 +106,42 @@ void OctreeNode::print(int depth) const{
     {
         if (child)
             child->print(depth + 1);
+    }
+}
+
+bool OctreeNode::intersectsSphere(const Vector3d& center, double radius) const
+{
+    Vector3d half{halfWidth_, halfWidth_, halfWidth_};
+
+    Vector3d min = center_ - half;
+    Vector3d max = center_ + half;
+
+    Vector3d closest;
+
+    closest.x = std::clamp(center.x, min.x, max.x);
+    closest.y = std::clamp(center.y, min.y, max.y);
+    closest.z = std::clamp(center.z, min.z, max.z);
+
+    Vector3d difference = center - closest;
+
+    return difference.normSq() <= radius * radius;
+}
+
+void OctreeNode::querySphere(const Vector3d& center, double radius, std::vector<Body*>& results) const{
+    if (!intersectsSphere(center, radius)){
+        return;
+    }
+
+    if (isLeaf()){
+        for (Body* body : bodies_){
+            results.push_back(body);
+        }
+        return;
+    }
+
+    for (const auto& child : children_){
+        if (child){
+            child->querySphere(center, radius, results);
+        }
     }
 }

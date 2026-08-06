@@ -18,6 +18,8 @@ class Physics{
 
         void buildTree();
         void computeAccelerations();
+        void checkCollisions();
+        void removeDeadBodies();
     public:
         void addBody(Body* body);
         void step(double dt);

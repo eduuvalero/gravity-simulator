@@ -4,6 +4,10 @@
 #include <iostream>
 #include <algorithm>
 
+enum BodyType{
+    Star, Planet, Moon, Asteroid
+};
+
 struct Vector3d{
     double x, y, z;
 
@@ -65,8 +69,12 @@ struct Vector3d{
 };
 
 struct Body{
+    BodyType type;
+    bool alive = true;
+
     double mass; 
     double radius;
+
     Vector3d position;
     Vector3d velocity;
     Vector3d acceleration;
