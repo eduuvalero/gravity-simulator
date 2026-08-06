@@ -2,7 +2,7 @@
 
 #include "Body.h"
 #include "OctreeNode.h"
-#include "Vector3d.h"
+#include "Vector3.h"
 
 class Gravity{
     private:

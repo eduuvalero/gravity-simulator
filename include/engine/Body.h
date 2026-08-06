@@ -4,7 +4,7 @@
 #include <iostream>
 #include <algorithm>
 
-#include "Vector3d.h"
+#include "Vector3.h"
 
 enum BodyType{
     Star, Planet

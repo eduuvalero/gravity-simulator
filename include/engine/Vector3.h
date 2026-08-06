@@ -3,6 +3,10 @@
 #include <algorithm>
 #include <iostream>
 
+struct Vector3f{
+    float x, y, z;
+};
+
 struct Vector3d{
     double x, y, z;
 
