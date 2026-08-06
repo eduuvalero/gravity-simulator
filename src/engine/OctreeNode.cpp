@@ -5,9 +5,9 @@
 
 int OctreeNode::getOctant(const Vector3d& pos) const {
     int oct = 0;
-    if (pos.x > center_.x) oct |= 1;
-    if (pos.y > center_.y) oct |= 2;
-    if (pos.z > center_.z) oct |= 4;
+    if(pos.x >= center_.x) oct |= 1;
+    if(pos.y >= center_.y) oct |= 2;
+    if(pos.z >= center_.z) oct |= 4;
     return oct;
 }
 
@@ -128,20 +128,27 @@ bool OctreeNode::intersectsSphere(const Vector3d& center, double radius) const
 }
 
 void OctreeNode::querySphere(const Vector3d& center, double radius, std::vector<Body*>& results) const{
-    if (!intersectsSphere(center, radius)){
+    if (!intersectsSphere(center, radius))
         return;
-    }
 
     if (isLeaf()){
         for (Body* body : bodies_){
-            results.push_back(body);
+            Vector3d diff = body->position - center;
+
+            double distanceSq = diff.normSq();
+            double radiusSum = radius + body->radius;
+
+            if(distanceSq <= radiusSum * radiusSum){
+                results.push_back(body);
+            }
         }
+
         return;
     }
 
-    for (const auto& child : children_){
-        if (child){
+
+    for(const auto& child : children_){
+        if(child)
             child->querySphere(center, radius, results);
-        }
     }
 }

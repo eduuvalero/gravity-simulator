@@ -1,5 +1,7 @@
 #include "engine/Collisions.h"
 
+#include <cmath>
+
 namespace Collisions{
     bool checkCollision(const Body& a, const Body& b){
         Vector3d d = a.position - b.position;
@@ -9,7 +11,28 @@ namespace Collisions{
         return distanceSq <= radiusSum * radiusSum;
     }
 
+    void separateBodies(Body& a, Body& b){
+        Vector3d direction = b.position - a.position;
+
+        double distance = direction.norm();
+
+        if(distance < 1e-8)
+            return;
+
+        double overlap = a.radius + b.radius - distance;
+
+        if(overlap > 0){
+            Vector3d normal = direction / distance;
+
+            a.position -= normal * (overlap * 0.5);
+            b.position += normal * (overlap * 0.5);
+        }
+    }
+
     void elasticCollision(Body& a, Body& b){
+        
+        separateBodies(a,b);
+
         Vector3d normal = b.position - a.position;
 
         double distance = normal.norm();
@@ -39,27 +62,38 @@ namespace Collisions{
     }
 
     void resolveCollision(Body& a, Body& b){
-        if (!a.alive || !b.alive)
-            return;
-
         if (a.type == Star && b.type == Star){
-            a.mass += b.mass;
+            Body* bigger = &a;
+            Body* smaller = &b;
 
-            a.radius = std::cbrt(a.radius * a.radius * a.radius + b.radius * b.radius * b.radius);
+            if (b.mass > a.mass){
+                bigger = &b;
+                smaller = &a;
+            }
 
-            b.alive = false;
 
-            if(b.mass > a.mass)
+            bigger->radius = std::cbrt(
+                bigger->radius * bigger->radius * bigger->radius +
+                smaller->radius * smaller->radius * smaller->radius
+            );
+
+            bigger->velocity = (bigger->velocity * bigger->mass + smaller->velocity * smaller ->mass) / (bigger->mass + smaller->mass);
+
+            bigger->mass += smaller->mass;
+
+            smaller->alive = false;
+
             return;
         }
 
         if (a.type == Star){
+            a.mass += b.mass;
             b.alive = false;
             return;
         }
 
-        if (b.type == Star)
-        {
+        if (b.type == Star){
+            b.mass += a.mass;
             a.alive = false;
             return;
         }
