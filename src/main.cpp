@@ -1,4 +1,6 @@
 #include <iostream>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #include "engine/Physics.h"
 #include "engine/Body.h"
@@ -32,9 +34,20 @@ int main(){
 
     const double dt = Config::simulation.dt;
 
-    for (int i = 0; i < 1000000; ++i){
-        physics.step(dt);
-        cout << "Step " << i << ": Earth position: " << earth.position << ", Moon position: " << moon.position << std::endl;
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "Gravity Simulator", nullptr, nullptr);
+
+    if (!window){
+        std::cerr << "Failed to create window\n";
+
+        glfwTerminate();
+
+        return -1;
     }
+
     return 0;
 }
