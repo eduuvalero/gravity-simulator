@@ -6,27 +6,27 @@
 #include <iostream>
 
 #include "Body.h"
-#include "Vector3.h"
+#include "math/Vector3.h"
 
 class OctreeNode {
     private:
         const double halfWidth_;
-        const Vector3d center_;
+        const Vec3d center_;
 
-        Vector3d centerOfMass_{0, 0, 0};
+        Vec3d centerOfMass_{0, 0, 0};
         double totalMass_ = 0.0;
         std::vector<Body*> bodies_;
         std::array<std::unique_ptr<OctreeNode>, 8> children_;
 
-        int getOctant(const Vector3d& pos) const;
+        int getOctant(const Vec3d& pos) const;
         void createChild(int oct);
-        bool intersectsSphere(const Vector3d& center, double radius) const;
+        bool intersectsSphere(const Vec3d& center, double radius) const;
 
     public:
-        OctreeNode(Vector3d center, double halfWidth) : center_(center), halfWidth_(halfWidth) {};
+        OctreeNode(Vec3d center, double halfWidth) : center_(center), halfWidth_(halfWidth) {};
         void insert(Body* body);
         void print(int depth = 0) const;
-        void querySphere(const Vector3d& center, double radius, std::vector<Body*>& results) const;
+        void querySphere(const Vec3d& center, double radius, std::vector<Body*>& results) const;
 
         // GETTERS
         const std::vector<Body*>& getBodies() const { return bodies_; }
@@ -35,7 +35,7 @@ class OctreeNode {
 
         double getHalfWidth() const { return halfWidth_; }
 
-        Vector3d getCenterOfMass() const { return centerOfMass_; }
+        Vec3d getCenterOfMass() const { return centerOfMass_; }
 
         const auto& getChildren() const { return children_; }
 

@@ -14,15 +14,15 @@ void Physics::buildTree(){
         return;
     }
 
-    Vector3d min = bodies_[0]->position;
-    Vector3d max = bodies_[0]->position;
+    Vec3d min = bodies_[0]->position;
+    Vec3d max = bodies_[0]->position;
 
     for(Body* b : bodies_){
         min = min.componentWiseMin(b->position);
         max = max.componentWiseMax(b->position);
     }
 
-    Vector3d center = (min + max) / 2.0;
+    Vec3d center = (min + max) / 2.0;
     double size = std::max({max.x - min.x, max.y - min.y, max.z - min.z}) * 0.5;
     size = std::max(size, 1e-6);
 

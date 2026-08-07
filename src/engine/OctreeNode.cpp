@@ -3,7 +3,7 @@
 
 #include <algorithm>
 
-int OctreeNode::getOctant(const Vector3d& pos) const {
+int OctreeNode::getOctant(const Vec3d& pos) const {
     int oct = 0;
     if(pos.x >= center_.x) oct |= 1;
     if(pos.y >= center_.y) oct |= 2;
@@ -14,14 +14,14 @@ int OctreeNode::getOctant(const Vector3d& pos) const {
 void OctreeNode::createChild(int oct){
     double quarter = halfWidth_ * 0.5;
 
-    Vector3d offset{
+    Vec3d offset{
         (oct & 1) ? quarter : -quarter,
         (oct & 2) ? quarter : -quarter,
         (oct & 4) ? quarter : -quarter
     };
 
     children_[oct] = std::make_unique<OctreeNode>(
-        Vector3d{
+        Vec3d{
             center_.x + offset.x,
             center_.y + offset.y,
             center_.z + offset.z
@@ -109,31 +109,31 @@ void OctreeNode::print(int depth) const{
     }
 }
 
-bool OctreeNode::intersectsSphere(const Vector3d& center, double radius) const
+bool OctreeNode::intersectsSphere(const Vec3d& center, double radius) const
 {
-    Vector3d half{halfWidth_, halfWidth_, halfWidth_};
+    Vec3d half{halfWidth_, halfWidth_, halfWidth_};
 
-    Vector3d min = center_ - half;
-    Vector3d max = center_ + half;
+    Vec3d min = center_ - half;
+    Vec3d max = center_ + half;
 
-    Vector3d closest;
+    Vec3d closest;
 
     closest.x = std::clamp(center.x, min.x, max.x);
     closest.y = std::clamp(center.y, min.y, max.y);
     closest.z = std::clamp(center.z, min.z, max.z);
 
-    Vector3d difference = center - closest;
+    Vec3d difference = center - closest;
 
     return difference.normSq() <= radius * radius;
 }
 
-void OctreeNode::querySphere(const Vector3d& center, double radius, std::vector<Body*>& results) const{
+void OctreeNode::querySphere(const Vec3d& center, double radius, std::vector<Body*>& results) const{
     if (!intersectsSphere(center, radius))
         return;
 
     if (isLeaf()){
         for (Body* body : bodies_){
-            Vector3d diff = body->position - center;
+            Vec3d diff = body->position - center;
 
             double distanceSq = diff.normSq();
             double radiusSum = radius + body->radius;

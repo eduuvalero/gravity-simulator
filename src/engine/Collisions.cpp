@@ -4,7 +4,7 @@
 
 namespace Collisions{
     bool checkCollision(const Body& a, const Body& b){
-        Vector3d d = a.position - b.position;
+        Vec3d d = a.position - b.position;
 
         double distanceSq = d.normSq();
         double radiusSum = a.radius + b.radius;
@@ -12,7 +12,7 @@ namespace Collisions{
     }
 
     void separateBodies(Body& a, Body& b){
-        Vector3d direction = b.position - a.position;
+        Vec3d direction = b.position - a.position;
 
         double distance = direction.norm();
 
@@ -22,7 +22,7 @@ namespace Collisions{
         double overlap = a.radius + b.radius - distance;
 
         if(overlap > 0){
-            Vector3d normal = direction / distance;
+            Vec3d normal = direction / distance;
 
             a.position -= normal * (overlap * 0.5);
             b.position += normal * (overlap * 0.5);
@@ -33,7 +33,7 @@ namespace Collisions{
         
         separateBodies(a,b);
 
-        Vector3d normal = b.position - a.position;
+        Vec3d normal = b.position - a.position;
 
         double distance = normal.norm();
 
@@ -44,7 +44,7 @@ namespace Collisions{
             normal /= distance;
         }
 
-        Vector3d relativeVelocity = b.velocity - a.velocity;
+        Vec3d relativeVelocity = b.velocity - a.velocity;
 
         double velocityAlongNormal = relativeVelocity.dot(normal);
 
@@ -55,7 +55,7 @@ namespace Collisions{
 
         double impulse = -(1.0 + restitution) * velocityAlongNormal / (1.0 / a.mass + 1.0 / b.mass);
 
-        Vector3d impulseVector = normal * impulse;
+        Vec3d impulseVector = normal * impulse;
 
         a.velocity -= impulseVector / a.mass;
         b.velocity += impulseVector / b.mass;

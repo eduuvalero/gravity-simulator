@@ -2,19 +2,19 @@
 
 #include "Body.h"
 #include "OctreeNode.h"
-#include "Vector3.h"
+#include "math/Vector3.h"
 
 class Gravity{
     private:
-        Vector3d barnesHut(Body* body, OctreeNode* node);
+        Vec3d barnesHut(Body* body, OctreeNode* node);
 
-        Vector3d calculateAccelerationFromMass(Body* body, double mass, const Vector3d& position);
+        Vec3d calculateAccelerationFromMass(Body* body, double mass, const Vec3d& position);
 
-        Vector3d calculateAccelerationBetweenBodies(Body* a, Body* b);
+        Vec3d calculateAccelerationBetweenBodies(Body* a, Body* b);
 
         bool shouldApproximate(Body* body, OctreeNode* node);
     public:
-        Vector3d calculateAcceleration(Body* body, OctreeNode* root){
+        Vec3d calculateAcceleration(Body* body, OctreeNode* root){
             return barnesHut(body, root);
         };
 };

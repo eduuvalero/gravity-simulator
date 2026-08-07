@@ -1,10 +1,10 @@
 #include "engine/Gravity.h"
-#include "config/Config.h"
 
 #include <cmath>
+#include "config/Config.h"
 
-Vector3d Gravity::calculateAccelerationFromMass(Body* body, double mass, const Vector3d& position){
-    Vector3d direction = position - body->position;
+Vec3d Gravity::calculateAccelerationFromMass(Body* body, double mass, const Vec3d& position){
+    Vec3d direction = position - body->position;
 
     double distanceSq = direction.normSq() + Config::physics.softening * Config::physics.softening;
 
@@ -13,7 +13,7 @@ Vector3d Gravity::calculateAccelerationFromMass(Body* body, double mass, const V
     return direction * factor;
 }
 
-Vector3d Gravity::calculateAccelerationBetweenBodies(Body* a, Body* b){
+Vec3d Gravity::calculateAccelerationBetweenBodies(Body* a, Body* b){
     return calculateAccelerationFromMass(a, b->mass, b->position);
 }
 
@@ -25,8 +25,8 @@ bool Gravity::shouldApproximate(Body* body, OctreeNode* node){
     return (distance > 0 ? (size / distance) < Config::physics.barnesHutTheta : false);
 };
 
-Vector3d Gravity::barnesHut(Body* body, OctreeNode* node){
-    Vector3d acceleration{0,0,0};
+Vec3d Gravity::barnesHut(Body* body, OctreeNode* node){
+    Vec3d acceleration{0,0,0};
 
     if(node->getTotalMass() == 0){
         return acceleration;
