@@ -1,10 +1,11 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.60)
 
-project(GravitySimulation)
+project(GravitySimulator)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_executable(GravitySimulator
     src/main.cpp
@@ -24,6 +25,7 @@ add_executable(GravitySimulator
     src/io/CSVImporter.cpp
 
     src/config/Config.cpp
+    src/graphics/IndexBuffer.cpp
 )
 
 target_include_directories(GravitySimulator PRIVATE
@@ -57,7 +59,13 @@ FetchContent_MakeAvailable(
 )
 
 find_package(OpenGL REQUIRED)
-find_package(OpenMP)
+find_package(OpenMP COMPONENTS CXX)
+
+if(OpenMP_CXX_FOUND)
+
+    target_link_libraries(GravitySimulator PRIVATE OpenMP::OpenMP_CXX)
+
+endif()
 
 target_link_libraries(GravitySimulator PRIVATE
     nlohmann_json::nlohmann_json
@@ -65,10 +73,6 @@ target_link_libraries(GravitySimulator PRIVATE
     glm
     OpenGL::GL
 )
-
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(GravitySimulator PRIVATE OpenMP::OpenMP_CXX)
-endif()
 
 if(MSVC)
     target_compile_options(GravitySimulator PRIVATE
@@ -79,10 +83,5 @@ else()
     target_compile_options(GravitySimulator PRIVATE
         $<$<CONFIG:Debug>:-O0 -g>
         $<$<CONFIG:Release>:-O3 -march=native>
-        $<$<CONFIG:RelWithDebInfo>:-O2 -g>
     )
 endif()
-
-set_target_properties(GravitySimulator PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-)

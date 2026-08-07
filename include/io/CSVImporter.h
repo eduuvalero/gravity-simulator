@@ -13,5 +13,6 @@ class CSVImporter{
         static Body parseBody(const std::vector<std::string>& fields);
         static BodyType parseType(const std::string& type);
         static double parseDouble(const std::string& value);
+        static double parseFloat(const std::string& value);
         static std::string trim(const std::string& str);
 };

@@ -25,7 +25,7 @@ std::vector<Body> CSVImporter::import(const std::string& path){
 };
 
 std::vector<std::string> CSVImporter::split(const std::string& line, char delimiter){
-    std::vector<std::string> fields;
+    std::vector<std::string> fields(13, "0");
     std::stringstream ss(line);
     std::string field;
 
@@ -52,6 +52,10 @@ Body CSVImporter::parseBody(const std::vector<std::string>& fields){
     body.velocity.y = parseDouble(fields[8]);
     body.velocity.z = parseDouble(fields[9]);
 
+    body.color.x = parseFloat(fields[10]);
+    body.color.y = parseFloat(fields[11]);
+    body.color.z = parseFloat(fields[12]);
+
     return body;
 }
 
@@ -75,6 +79,18 @@ double CSVImporter::parseDouble(const std::string& value){
     std::size_t pos = 0;
 
     double result = std::stod(value, &pos);
+
+    if (pos != value.size()){
+        throw std::runtime_error("Invalid number: " + value);
+    }
+
+    return result;
+}
+
+double CSVImporter::parseFloat(const std::string& value){
+    std::size_t pos = 0;
+
+    double result = std::stof(value, &pos);
 
     if (pos != value.size()){
         throw std::runtime_error("Invalid number: " + value);
