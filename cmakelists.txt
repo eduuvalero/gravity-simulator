@@ -17,6 +17,7 @@ add_executable(GravitySimulator
     src/engine/Physics.cpp
 
     src/graphics/Window.cpp
+    src/graphics/Shader.cpp
 
     src/config/Config.cpp
 

@@ -12,8 +12,8 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath){
     std::string fragmentSrc = readFile(fragmentPath);
 
     try{
-        GLuint vertexShader = compileShader(GL_VERTEX_SHADER, vertexSrc);
-        GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentSrc);
+        vertexShader = compileShader(GL_VERTEX_SHADER, vertexSrc);
+        fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentSrc);
 
         programID = linkProgram(vertexShader, fragmentShader);
 
