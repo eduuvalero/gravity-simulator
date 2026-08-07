@@ -62,7 +62,7 @@ namespace Collisions{
     }
 
     void resolveCollision(Body& a, Body& b){
-        if (a.type == Star && b.type == Star){
+        if (a.type == BodyType::Star && b.type == BodyType::Star){
             Body* bigger = &a;
             Body* smaller = &b;
 
@@ -86,13 +86,13 @@ namespace Collisions{
             return;
         }
 
-        if (a.type == Star){
+        if (a.type == BodyType::Star){
             a.mass += b.mass;
             b.alive = false;
             return;
         }
 
-        if (b.type == Star){
+        if (b.type == BodyType::Star){
             b.mass += a.mass;
             a.alive = false;
             return;

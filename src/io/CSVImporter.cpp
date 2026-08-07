@@ -61,11 +61,11 @@ BodyType CSVImporter::parseType(const std::string& type){
     std::transform(lower.begin(), lower.end(), lower.begin(), [](unsigned char c) { return std::tolower(c); } );
 
     if (lower == "star"){
-        return Star;
+        return BodyType::Star;
     }
 
     if (lower == "planet"){
-        return Planet;
+        return BodyType::Planet;
     }
 
     throw std::runtime_error("Unknown body type: " + type);

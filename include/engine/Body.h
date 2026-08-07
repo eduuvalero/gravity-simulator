@@ -7,7 +7,7 @@
 
 #include "math/Vector3.h"
 
-enum BodyType{
+enum class BodyType{
     Star, Planet
 };
 
@@ -20,7 +20,7 @@ struct Body{
     double mass; 
     double radius;
 
-    Vec3d color;
+    Vec3f color;
     Vec3d position;
     Vec3d velocity;
     Vec3d acceleration;
