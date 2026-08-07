@@ -1,9 +1,9 @@
 #include "graphics/Window.h"
 
 #include <iostream>
-
 #include <glad/glad.h>
 
+#include "config/Config.h"
 
 Window::Window(int width, int height, const std::string& title){
     if (!glfwInit()){
@@ -13,15 +13,13 @@ Window::Window(int width, int height, const std::string& title){
     }
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
-
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
-
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 
-#ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
+    #ifdef __APPLE__
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    #endif
 
     window_ = glfwCreateWindow(width,height,title.c_str(),nullptr,nullptr);
 
@@ -41,7 +39,7 @@ Window::Window(int width, int height, const std::string& title){
     }
 
 
-    glfwSwapInterval(1); 
+    glfwSwapInterval(Config::render.vsync); 
 }
 
 
