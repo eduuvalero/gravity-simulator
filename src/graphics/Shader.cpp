@@ -25,7 +25,15 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath){
         glDeleteShader(fragmentShader);
         throw;
     }
-};
+}
+
+Shader::~Shader() { 
+    glDeleteProgram(programID); 
+}
+
+void Shader::use() const { 
+    glUseProgram(programID); 
+}
 
 GLuint Shader::compileShader(GLenum type, const std::string& source){
     GLuint shader = glCreateShader(type);

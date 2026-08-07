@@ -20,6 +20,7 @@ struct Body{
     double mass; 
     double radius;
 
+    Vec3d color;
     Vec3d position;
     Vec3d velocity;
     Vec3d acceleration;
