@@ -1,6 +1,6 @@
 {
     "simulation": {
-        "dt": 0.01
+        "dt": 0.003
     },
 
     "physics": {
@@ -21,7 +21,8 @@
     },
 
     "camera": {
-        "moveSpeed": 50.0,
+        "position": 1,
+        "moveSpeed": 500.0,
         "mouseSensitivity": 0.002
     }
 }

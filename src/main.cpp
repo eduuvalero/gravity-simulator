@@ -16,18 +16,22 @@ int main(){
     Physics physics;
     physics.importBodies("config/input.csv");
 
-    Window window(Config::render.width, Config::render.height,"Grasity Simulator");
+    Window window(Config::render.width, Config::render.height, "Gravity Simulator");
+
     Input input(window.getNativeWindow());
-    Camera camera({0.0f, 0.0f,  3.0f});
+    Camera camera({0.0f, 0.0f, 300.0f});
     CameraController cameraController(Config::camera.moveSpeed, Config::camera.mouseSensitivity);
 
-    while(!window.shouldClose()){
-        window.getNativeWindow();
+    Renderer renderer;
 
-        cameraController.update(camera, input,  Config::simulation.dt);
+    while(!window.shouldClose()){
+        cameraController.update(camera, input, Config::simulation.dt);
 
         physics.step(Config::simulation.dt);
 
+        renderer.beginFrame(camera, window.getSize()[0], window.getSize()[1]);
+        renderer.render(physics.getBodies());
+
         window.update();
-    };
-};
+    }
+}

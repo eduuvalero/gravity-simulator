@@ -25,4 +25,5 @@ class Physics{
         void addBodies(std::vector<Body> bodies);
         void importBodies(const std::string& path);
         void step(double dt);
+        const std::vector<Body>& getBodies() const;
 };

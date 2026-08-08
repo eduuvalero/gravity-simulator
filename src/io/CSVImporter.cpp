@@ -25,11 +25,14 @@ std::vector<Body> CSVImporter::import(const std::string& path){
 };
 
 std::vector<std::string> CSVImporter::split(const std::string& line, char delimiter){
-    std::vector<std::string> fields(13, "0");
+    std::vector<std::string> fields;
     std::stringstream ss(line);
     std::string field;
 
     while( getline(ss, field, delimiter) ){
+        if(field.empty()){
+            continue;
+        }
         fields.push_back(trim(field));
     }
 

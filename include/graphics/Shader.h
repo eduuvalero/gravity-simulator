@@ -10,6 +10,7 @@ class Shader{
         ~Shader();
         void use() const;
         void setMat4(const std::string& name, const glm::mat4& matrix);
+        void setVec3(const std::string& name, const glm::vec3& value);
     private:
         GLuint programID;
         static std::string readFile(const std::string& path);

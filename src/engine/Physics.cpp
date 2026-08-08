@@ -16,7 +16,11 @@ void Physics::addBodies(std::vector<Body> bodies){
 }
 
 void Physics::importBodies(const std::string& path){
-    std::vector<Body> bodies = CSVImporter::import("config/input.csv");
+    bodies_ = CSVImporter::import(path);
+}
+
+const std::vector<Body>& Physics::getBodies() const{
+    return bodies_;
 }
 
 void Physics::buildTree(){
@@ -28,7 +32,7 @@ void Physics::buildTree(){
     Vec3d min = bodies_[0].position;
     Vec3d max = bodies_[0].position;
 
-    for(Body b : bodies_){
+    for(const Body& b : bodies_){
         min = min.componentWiseMin(b.position);
         max = max.componentWiseMax(b.position);
     }
@@ -39,7 +43,7 @@ void Physics::buildTree(){
 
     root_ = std::make_unique<OctreeNode>(center, size);
 
-    for(Body b : bodies_){
+    for(Body& b : bodies_){
         root_->insert(&b);
     }
 }
@@ -56,7 +60,7 @@ void Physics::computeAccelerations(){
 }
 
 void Physics::checkCollisions(){
-    for (Body body : bodies_){
+    for (Body& body : bodies_){
         if (!body.alive)
             continue;
 
@@ -84,7 +88,7 @@ void Physics::checkCollisions(){
 
 void Physics::removeDeadBodies(){
         bodies_.erase(
-        std::remove_if(bodies_.begin(), bodies_.end(), [](Body body){
+        std::remove_if(bodies_.begin(), bodies_.end(), [](const Body& body){
                 return !body.alive;
             }
         ),
