@@ -15,9 +15,6 @@ int main(){
 
     Physics physics;
     physics.importBodies("assets/io/input.csv");
-     physics.importBodies("assets/io/input.csv");
-      physics.importBodies("assets/io/input.csv");
-    
 
     Window window;
     Input input(window.getNativeWindow());
