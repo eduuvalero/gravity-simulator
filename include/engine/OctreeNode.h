@@ -25,18 +25,13 @@ class OctreeNode {
     public:
         OctreeNode(Vec3d center, double halfWidth) : center_(center), halfWidth_(halfWidth) {};
         void insert(Body* body);
-        void print(int depth = 0) const;
         void querySphere(const Vec3d& center, double radius, std::vector<Body*>& results) const;
 
-        // GETTERS
+        
         const std::vector<Body*>& getBodies() const { return bodies_; }
-
         double getTotalMass() const { return totalMass_; }
-
         double getHalfWidth() const { return halfWidth_; }
-
         Vec3d getCenterOfMass() const { return centerOfMass_; }
-
         const auto& getChildren() const { return children_; }
 
         bool isLeaf() const {

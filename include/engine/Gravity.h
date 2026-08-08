@@ -14,7 +14,5 @@ class Gravity{
 
         bool shouldApproximate(Body* body, OctreeNode* node);
     public:
-        Vec3d calculateAcceleration(Body* body, OctreeNode* root){
-            return barnesHut(body, root);
-        };
+        Vec3d calculateAcceleration(Body* body, OctreeNode* root){ return barnesHut(body, root); };
 };

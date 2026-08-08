@@ -12,10 +12,12 @@ bool Input::isKeyJustPressed(int key){
     const bool pressed = isKeyPressed(key);
     const bool wasPressed = previousKeys.contains(key);
 
-    if (pressed)
+    if(pressed){
         previousKeys.insert(key);
-    else
+    }
+    else{
         previousKeys.erase(key);
+    }
 
     return pressed && !wasPressed;
 }

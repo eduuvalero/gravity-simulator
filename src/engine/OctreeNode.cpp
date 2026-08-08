@@ -21,20 +21,13 @@ void OctreeNode::createChild(int oct){
     };
 
     children_[oct] = std::make_unique<OctreeNode>(
-        Vec3d{
-            center_.x + offset.x,
-            center_.y + offset.y,
-            center_.z + offset.z
-        },
-        quarter
-    );
+        Vec3d{center_.x + offset.x, center_.y + offset.y, center_.z + offset.z}, quarter);
 }
 
 void OctreeNode::insert(Body* body){
     const double oldMass = totalMass_;
 
     totalMass_ += body->mass;
-
     centerOfMass_ = (centerOfMass_ * oldMass + body->position * body->mass) / totalMass_;
 
     if(isLeaf()){
@@ -43,8 +36,7 @@ void OctreeNode::insert(Body* body){
             return;
         }
 
-        if (halfWidth_ <= Config::octree.minimumHalfWidth)
-        {
+        if (halfWidth_ <= Config::octree.minimumHalfWidth){
             bodies_.push_back(body);
             return;
         }
@@ -69,48 +61,7 @@ void OctreeNode::insert(Body* body){
     children_[oct]->insert(body);
 };
 
-void OctreeNode::print(int depth) const{
-
-    for (int i = 0; i < depth; i++)
-        std::cout << "  ";
-
-    std::cout 
-        << "Node"
-        << " | Mass: " << totalMass_
-        << " | COM: ("
-        << centerOfMass_.x << ", "
-        << centerOfMass_.y << ", "
-        << centerOfMass_.z << ")"
-        << " | Bodies: " << bodies_.size()
-        << "\n";
-
-    
-    if (isLeaf()){
-        for (Body* b : bodies_)
-        {
-            for (int i = 0; i < depth + 1; i++)
-                std::cout << "  ";
-
-            std::cout 
-                << "Body"
-                << " | Mass: " << b->mass
-                << " | Pos: ("
-                << b->position.x << ", "
-                << b->position.y << ", "
-                << b->position.z << ")"
-                << "\n";
-        }
-    }
-
-    for (const auto& child : children_)
-    {
-        if (child)
-            child->print(depth + 1);
-    }
-}
-
-bool OctreeNode::intersectsSphere(const Vec3d& center, double radius) const
-{
+bool OctreeNode::intersectsSphere(const Vec3d& center, double radius) const{
     Vec3d half{halfWidth_, halfWidth_, halfWidth_};
 
     Vec3d min = center_ - half;

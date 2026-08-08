@@ -7,7 +7,6 @@ Vec3d Gravity::calculateAccelerationFromMass(Body* body, double mass, const Vec3
     Vec3d direction = position - body->position;
 
     double distanceSq = direction.normSq() + Config::physics.softening * Config::physics.softening;
-
     double factor = Config::physics.gravitationalConstant * mass / (distanceSq * std::sqrt(distanceSq));
 
     return direction * factor;
@@ -19,7 +18,6 @@ Vec3d Gravity::calculateAccelerationBetweenBodies(Body* a, Body* b){
 
 bool Gravity::shouldApproximate(Body* body, OctreeNode* node){
     double distance = (node->getCenterOfMass() - body->position).norm();
-
     double size = node->getHalfWidth() * 2.0;
 
     return (distance > 0 ? (size / distance) < Config::physics.barnesHutTheta : false);

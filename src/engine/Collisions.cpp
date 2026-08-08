@@ -16,8 +16,9 @@ namespace Collisions{
 
         double distance = direction.norm();
 
-        if(distance < 1e-8)
+        if(distance < 1e-8){
             return;
+        }
 
         double overlap = a.radius + b.radius - distance;
 
@@ -30,11 +31,9 @@ namespace Collisions{
     }
 
     void elasticCollision(Body& a, Body& b){
-        
         separateBodies(a,b);
 
         Vec3d normal = b.position - a.position;
-
         double distance = normal.norm();
 
         if (distance < 1e-8){
@@ -45,16 +44,13 @@ namespace Collisions{
         }
 
         Vec3d relativeVelocity = b.velocity - a.velocity;
-
         double velocityAlongNormal = relativeVelocity.dot(normal);
 
         if (velocityAlongNormal > 0)
             return;
 
         double restitution = 1.0;
-
         double impulse = -(1.0 + restitution) * velocityAlongNormal / (1.0 / a.mass + 1.0 / b.mass);
-
         Vec3d impulseVector = normal * impulse;
 
         a.velocity -= impulseVector / a.mass;
@@ -71,16 +67,13 @@ namespace Collisions{
                 smaller = &a;
             }
 
-
             bigger->radius = std::cbrt(
                 bigger->radius * bigger->radius * bigger->radius +
                 smaller->radius * smaller->radius * smaller->radius
             );
 
             bigger->velocity = (bigger->velocity * bigger->mass + smaller->velocity * smaller ->mass) / (bigger->mass + smaller->mass);
-
             bigger->mass += smaller->mass;
-
             smaller->alive = false;
 
             return;
