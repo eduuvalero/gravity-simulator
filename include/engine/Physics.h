@@ -10,7 +10,7 @@
 
 class Physics{
     private:
-        std::vector<Body*> bodies_;
+        std::vector<Body> bodies_;
         Gravity gravity_;
         std::unique_ptr<OctreeNode> root_;
         Integrator integrator_;
@@ -21,6 +21,8 @@ class Physics{
         void checkCollisions();
         void removeDeadBodies();
     public:
-        void addBody(Body* body);
+        void addBody(Body body);
+        void addBodies(std::vector<Body> bodies);
+        void importBodies(const std::string& path);
         void step(double dt);
 };

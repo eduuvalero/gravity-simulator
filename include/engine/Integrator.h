@@ -7,6 +7,6 @@
 
 class Integrator{
     public:
-        void kick(std::vector<Body*>& bodies_, double dt);
-        void drift(std::vector<Body*>& bodies_, double dt);
+        void kick(std::vector<Body>& bodies_, double dt);
+        void drift(std::vector<Body>& bodies_, double dt);
 };

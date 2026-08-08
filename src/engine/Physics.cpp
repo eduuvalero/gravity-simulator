@@ -3,9 +3,20 @@
 #include <algorithm>
 
 #include "engine/Collisions.h"
+#include "io/CSVImporter.h"
 
-void Physics::addBody(Body* body){
+void Physics::addBody(Body body){
     bodies_.push_back(body);
+}
+
+void Physics::addBodies(std::vector<Body> bodies){
+    for(auto body : bodies){
+        bodies_.push_back(body);
+    }
+}
+
+void Physics::importBodies(const std::string& path){
+    std::vector<Body> bodies = CSVImporter::import("config/input.csv");
 }
 
 void Physics::buildTree(){
@@ -14,12 +25,12 @@ void Physics::buildTree(){
         return;
     }
 
-    Vec3d min = bodies_[0]->position;
-    Vec3d max = bodies_[0]->position;
+    Vec3d min = bodies_[0].position;
+    Vec3d max = bodies_[0].position;
 
-    for(Body* b : bodies_){
-        min = min.componentWiseMin(b->position);
-        max = max.componentWiseMax(b->position);
+    for(Body b : bodies_){
+        min = min.componentWiseMin(b.position);
+        max = max.componentWiseMax(b.position);
     }
 
     Vec3d center = (min + max) / 2.0;
@@ -28,8 +39,8 @@ void Physics::buildTree(){
 
     root_ = std::make_unique<OctreeNode>(center, size);
 
-    for(Body* b : bodies_){
-        root_->insert(b);
+    for(Body b : bodies_){
+        root_->insert(&b);
     }
 }
 
@@ -40,32 +51,32 @@ void Physics::computeAccelerations(){
 
     #pragma omp parallel for schedule(dynamic)
     for (std::size_t i = 0; i < bodies_.size(); ++i) {
-        bodies_[i]->acceleration = gravity_.calculateAcceleration(bodies_[i], root_.get());
+        bodies_[i].acceleration = gravity_.calculateAcceleration(&bodies_[i], root_.get());
     }
 }
 
 void Physics::checkCollisions(){
-    for (Body* body : bodies_){
-        if (!body->alive)
+    for (Body body : bodies_){
+        if (!body.alive)
             continue;
 
         std::vector<Body*> nearby;
 
-        root_->querySphere(body->position, body->radius, nearby);
+        root_->querySphere(body.position, body.radius, nearby);
 
 
         for (Body* other : nearby){
-            if (body == other)
+            if (&body == other)
                 continue;
 
-            if (body > other)
+            if (&body > other)
                 continue;
 
             if (!other->alive)
                 continue;
 
-            if (Collisions::checkCollision(*body, *other)){
-                Collisions::resolveCollision(*body, *other);
+            if (Collisions::checkCollision(body, *other)){
+                Collisions::resolveCollision(body, *other);
             }
         }
     }
@@ -73,8 +84,8 @@ void Physics::checkCollisions(){
 
 void Physics::removeDeadBodies(){
         bodies_.erase(
-        std::remove_if(bodies_.begin(), bodies_.end(), [](Body* body){
-                return !body->alive;
+        std::remove_if(bodies_.begin(), bodies_.end(), [](Body body){
+                return !body.alive;
             }
         ),
         bodies_.end()

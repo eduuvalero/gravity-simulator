@@ -1,77 +1,33 @@
-#include <vector>
+#include <iostream>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
+#include "engine/Physics.h"
 #include "graphics/Window.h"
 #include "graphics/Input.h"
 #include "graphics/Renderer.h"
-#include "graphics/Mesh.h"
-#include "graphics/Shader.h"
 #include "graphics/Camera.h"
 #include "graphics/CameraController.h"
+#include "io/CSVImporter.h"
 
-int main()
-{
-    Window window(800, 600, "Gravity Simulator - Camera Test");
+#include "config/Config.h"
+
+int main(){
+    Config::load("config/config.json");
+
+    Physics physics;
+    physics.importBodies("config/input.csv");
+
+    Window window(Config::render.width, Config::render.height,"Grasity Simulator");
     Input input(window.getNativeWindow());
+    Camera camera({0.0f, 0.0f,  3.0f});
+    CameraController cameraController(Config::camera.moveSpeed, Config::camera.mouseSensitivity);
 
-    // Start with the cursor visible.
-    input.setCursorCaptured(false);
+    while(!window.shouldClose()){
+        window.getNativeWindow();
 
-    std::vector<Vertex> vertices = {
-        {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}},
-        {{ 0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
-        {{ 0.0f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}}
-    };
+        cameraController.update(camera, input,  Config::simulation.dt);
 
-    std::vector<unsigned int> indices = {
-        0, 1, 2
-    };
-
-    Mesh mesh(vertices, indices);
-
-    Shader shader(
-        "shaders/default.vert",
-        "shaders/default.frag"
-    );
-
-    Renderer renderer;
-    Camera camera({0.0f, 0.0f, 40.0f});
-
-    CameraController cameraController(10,
-        0.002f
-    );
-
-    double lastTime = glfwGetTime();
-
-    while (!window.shouldClose()){
-        const double currentTime = glfwGetTime();
-
-        const float deltaTime = static_cast<float>(currentTime - lastTime);
-
-        lastTime = currentTime;
-        cameraController.update(camera, input, deltaTime);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        shader.use();
-
-        const glm::ivec2 windowSize = window.getSize();
-        const float aspectRatio = static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y);
-        glViewport(0, 0, windowSize.x, windowSize.y);
-
-        const glm::mat4 model = glm::mat4(1.0f);
-        const glm::mat4 view = camera.getViewMatrix();
-        const glm::mat4 projection = camera.getProjectionMatrix(aspectRatio);
-        
-
-        shader.setMat4("model", model);
-        shader.setMat4("view", view);
-        shader.setMat4("projection", projection);
-
-        renderer.draw(mesh, shader);
+        physics.step(Config::simulation.dt);
 
         window.update();
-    }
-
-    return 0;
-}
+    };
+};
