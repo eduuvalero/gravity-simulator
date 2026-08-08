@@ -10,10 +10,8 @@ class Mesh{
         VertexArray VAO;
         VertexBuffer VBO;
         IndexBuffer EBO;
-
-        unsigned int indexCount;
+        std::size_t indexCount;
     public:
         Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indexData);
-
-        void Draw() const;
+        void draw() const;
 };

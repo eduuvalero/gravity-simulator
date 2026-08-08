@@ -16,7 +16,6 @@ Window::Window(int width, int height, const std::string& title){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-
     #ifdef __APPLE__
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     #endif
@@ -38,32 +37,32 @@ Window::Window(int width, int height, const std::string& title){
         );
     }
 
-
     glfwSwapInterval(Config::render.vsync); 
 }
-
-
 
 Window::~Window(){
     glfwDestroyWindow(window_);
     glfwTerminate();
 }
 
-
-
 bool Window::shouldClose() const{
     return glfwWindowShouldClose(window_);
 }
-
-
 
 void Window::update(){
     glfwSwapBuffers(window_);
     glfwPollEvents();
 }
 
-
-
 GLFWwindow* Window::getNativeWindow() const{
     return window_;
+}
+
+glm::ivec2 Window::getSize() const {
+    int width;
+    int height;
+
+    glfwGetFramebufferSize(window_, &width, &height);
+
+    return {width, height};
 }

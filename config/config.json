@@ -18,5 +18,10 @@
         "width": 1280,
         "height": 720,
         "vsync": true
+    },
+
+    "camera": {
+        "moveSpeed": 10.0,
+        "mouseSensitivity": 0.002
     }
 }

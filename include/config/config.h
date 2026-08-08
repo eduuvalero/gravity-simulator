@@ -23,6 +23,11 @@ struct RenderConfig {
     bool vsync;
 };
 
+struct CameraConfig {
+    float moveSpeed;
+    float mouseSensitivity;
+};
+
 
 class Config {
 public:
@@ -30,6 +35,7 @@ public:
     static PhysicsConfig physics;
     static OctreeConfig octree;
     static RenderConfig render;
+    static CameraConfig camera;
 
     static void load(const std::string& path);
 };

@@ -4,6 +4,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 class Window{
     private:
@@ -14,4 +15,5 @@ class Window{
         bool shouldClose() const;
         void update();
         GLFWwindow* getNativeWindow() const;
+        glm::ivec2 getSize() const;
 };

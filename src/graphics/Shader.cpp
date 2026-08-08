@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <glm/gtc/type_ptr.hpp>
 
 Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath){
     GLuint vertexShader = 0;
@@ -98,4 +99,8 @@ void Shader::checkProgram(GLuint program){
         
         throw std::runtime_error("Program linking failed:\n" + log);
     }
+}
+
+void Shader::setMat4(const std::string& name, const glm::mat4& matrix){
+    glUniformMatrix4fv(glGetUniformLocation(programID, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
 }
