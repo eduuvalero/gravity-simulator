@@ -15,19 +15,21 @@ int main(){
 
     Physics physics;
     physics.importBodies("assets/io/input.csv");
+     physics.importBodies("assets/io/input.csv");
+      physics.importBodies("assets/io/input.csv");
+    
 
-    Window window(Config::render.width, Config::render.height, "Gravity Simulator");
-
+    Window window;
     Input input(window.getNativeWindow());
-    Camera camera({0.0f, 0.0f, 300.0f});
-    CameraController cameraController(Config::camera.moveSpeed, Config::camera.mouseSensitivity);
+    Camera camera;
+    CameraController cameraController;
 
     Renderer renderer;
 
     while(!window.shouldClose()){
-        cameraController.update(camera, input, Config::simulation.dt);
+        cameraController.update(camera, input);
 
-        physics.step(Config::simulation.dt);
+        physics.step();
 
         renderer.beginFrame(camera, window.getSize()[0], window.getSize()[1]);
         renderer.render(physics.getBodies());

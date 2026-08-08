@@ -10,17 +10,19 @@
     },
 
     "octree": {
-        "capacity": 4,
-        "minimumHalfWidth": 1e-6
+        "capacity": 16,
+        "minimumHalfWidth": 1e-16
     },
 
-    "render": {
+    "window": {
         "width": 1280,
         "height": 720,
+        "title": "Gravity Simulator",
         "vsync": true
     },
 
     "camera": {
+        "position": [0.0, 0.0, 300.0],
         "moveSpeed": 500.0,
         "mouseSensitivity": 0.002
     }

@@ -10,7 +10,7 @@ using json = nlohmann::json;
 SimulationConfig Config::simulation;
 PhysicsConfig Config::physics;
 OctreeConfig Config::octree;
-RenderConfig Config::render;
+WindowConfig Config::window;
 CameraConfig Config::camera;
 
 void Config::load(const std::string& path){
@@ -31,10 +31,12 @@ void Config::load(const std::string& path){
     octree.capacity = j.at("octree").at("capacity").get<int>();
     octree.minimumHalfWidth = j.at("octree").at("minimumHalfWidth").get<double>();
 
-    render.width = j.at("render").at("width").get<int>();
-    render.height = j.at("render").at("height").get<int>();
-    render.vsync = j.at("render").at("vsync").get<bool>();
+    window.width = j.at("window").at("width").get<int>();
+    window.height = j.at("window").at("height").get<int>();
+    window.title = j.at("window").at("title").get<std::string>();
+    window.vsync = j.at("window").at("vsync").get<bool>();
 
+    camera.position = {j.at("camera").at("position").get<std::vector<float>>()[0], j.at("camera").at("position").get<std::vector<float>>()[1], j.at("camera").at("position").get<std::vector<float>>()[2]};
     camera.moveSpeed = j.at("camera").at("moveSpeed").get<float>();
     camera.mouseSensitivity = j.at("camera").at("mouseSensitivity").get<float>();
 }

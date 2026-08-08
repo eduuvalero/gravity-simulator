@@ -24,14 +24,15 @@ add_executable(GravitySimulator
     src/graphics/IndexBuffer.cpp
     src/graphics/Mesh.cpp
     src/graphics/Renderer.cpp
-
-    src/io/CSVImporter.cpp
-
-    src/config/Config.cpp
     src/graphics/Camera.cpp
     src/graphics/Input.cpp
     src/graphics/CameraController.cpp
     src/graphics/SphereMesh.cpp
+    src/graphics/LightManager.cpp
+
+    src/io/CSVImporter.cpp
+    src/config/Config.cpp
+    include/graphics/LightGrid.h
 )
 
 target_include_directories(GravitySimulator PRIVATE
@@ -39,6 +40,18 @@ target_include_directories(GravitySimulator PRIVATE
 )
 
 include(FetchContent)
+
+if(MSVC)
+    target_compile_options(GravitySimulator PRIVATE
+        $<$<CONFIG:Debug>:/Od>
+        $<$<CONFIG:Release>:/O2>
+    )
+else()
+    target_compile_options(GravitySimulator PRIVATE
+        $<$<CONFIG:Debug>:-O0 -g>
+        $<$<CONFIG:Release>:-O3 -march=native>
+    )
+endif()
 
 FetchContent_Declare(
     json
@@ -77,15 +90,3 @@ target_link_libraries(GravitySimulator PRIVATE
     glm
     OpenGL::GL
 )
-
-if(MSVC)
-    target_compile_options(GravitySimulator PRIVATE
-        $<$<CONFIG:Debug>:/Od>
-        $<$<CONFIG:Release>:/O2>
-    )
-else()
-    target_compile_options(GravitySimulator PRIVATE
-        $<$<CONFIG:Debug>:-O0 -g>
-        $<$<CONFIG:Release>:-O3 -march=native>
-    )
-endif()

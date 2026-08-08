@@ -7,6 +7,7 @@
 #include "Gravity.h"
 #include "OctreeNode.h"
 #include "Integrator.h"
+#include "config/Config.h"
 
 class Physics{
     private:
@@ -24,6 +25,6 @@ class Physics{
         void addBody(Body body);
         void addBodies(std::vector<Body> bodies);
         void importBodies(const std::string& path);
-        void step(double dt);
+        void step(double dt = Config::simulation.dt);
         const std::vector<Body>& getBodies() const;
 };

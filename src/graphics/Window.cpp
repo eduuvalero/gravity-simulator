@@ -37,7 +37,7 @@ Window::Window(int width, int height, const std::string& title){
         );
     }
 
-    glfwSwapInterval(Config::render.vsync); 
+    glfwSwapInterval(Config::window.vsync); 
 }
 
 Window::~Window(){
