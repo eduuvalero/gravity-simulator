@@ -14,7 +14,7 @@ int main(){
     Config::load("config/config.json");
 
     Physics physics;
-    physics.importBodies("config/input.csv");
+    physics.importBodies("assets/io/input.csv");
 
     Window window(Config::render.width, Config::render.height, "Gravity Simulator");
 

@@ -21,7 +21,6 @@
     },
 
     "camera": {
-        "position": 1,
         "moveSpeed": 500.0,
         "mouseSensitivity": 0.002
     }
