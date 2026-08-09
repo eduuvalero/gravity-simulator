@@ -29,10 +29,10 @@ add_executable(GravitySimulator
     src/graphics/CameraController.cpp
     src/graphics/SphereMesh.cpp
     src/graphics/LightManager.cpp
+    src/graphics/LightGrid.cpp
 
     src/io/CSVImporter.cpp
     src/config/Config.cpp
-    include/graphics/LightGrid.h
 )
 
 target_include_directories(GravitySimulator PRIVATE

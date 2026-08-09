@@ -12,6 +12,7 @@ PhysicsConfig Config::physics;
 OctreeConfig Config::octree;
 WindowConfig Config::window;
 CameraConfig Config::camera;
+LightningConfig Config::lightning;
 
 void Config::load(const std::string& path){
     std::ifstream file(path);
@@ -39,4 +40,9 @@ void Config::load(const std::string& path){
     camera.position = {j.at("camera").at("position").get<std::vector<float>>()[0], j.at("camera").at("position").get<std::vector<float>>()[1], j.at("camera").at("position").get<std::vector<float>>()[2]};
     camera.moveSpeed = j.at("camera").at("moveSpeed").get<float>();
     camera.mouseSensitivity = j.at("camera").at("mouseSensitivity").get<float>();
+
+    lightning.cellSize = j.at("lightning").at("cellSize").get<float>();
+    lightning.softening = j.at("lightning").at("softening").get<float>();
+    lightning.threshold = j.at("lightning").at("threshold").get<float>();
+    lightning.intensityScale = j.at("lightning").at("intensityScale").get<int>();
 }

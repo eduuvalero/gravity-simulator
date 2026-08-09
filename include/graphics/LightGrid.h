@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstddef>
 #include <unordered_map>
 #include <vector>
 #include <glm/vec3.hpp>
@@ -28,5 +27,10 @@ class LightGrid {
         float cellSize_;
         std::unordered_map<CellCoord, std::vector<std::size_t>,CellCoordHash> cells_;
         CellCoord worldToCell(const glm::vec3& position) const;
+    public:
+        explicit LightGrid(float cellSize);
         void insert(std::size_t lightIndex, const glm::vec3& position);
+        const std::vector<std::size_t>* find(const glm::vec3& position) const;
+        std::vector<std::size_t> queryNearby(const glm::vec3& position, int radius) const;
+        void clear();
 };

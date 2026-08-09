@@ -16,6 +16,7 @@ Window::Window(int width, int height, const std::string& title){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+
     #ifdef __APPLE__
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     #endif
@@ -31,12 +32,14 @@ Window::Window(int width, int height, const std::string& title){
 
     glfwMakeContextCurrent(window_);
 
-    if (!gladLoadGLLoader( (GLADloadproc)glfwGetProcAddress) ){
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
         throw std::runtime_error(
             "Failed to initialize GLAD"
         );
     }
 
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
     glfwSwapInterval(Config::window.vsync); 
 }
 

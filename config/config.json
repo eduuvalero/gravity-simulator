@@ -25,5 +25,12 @@
         "position": [0.0, 0.0, 300.0],
         "moveSpeed": 500.0,
         "mouseSensitivity": 0.002
+    },
+
+    "lightning": {
+        "cellSize": 100.0,
+        "softening": 0.001,
+        "threshold": 0.01,
+        "intensityScale": 1000000
     }
 }

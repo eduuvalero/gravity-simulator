@@ -43,18 +43,43 @@ void Renderer::beginFrame(const Camera& camera, int width, int height){
 };
 
 void Renderer::render(const std::vector<Body>& bodies){
+    lightManager.clear();
+
     for (const Body& body : bodies){
-        if (!body.alive)
+        if (!body.alive || body.type != BodyType::Star){
             continue;
+        }
+
+        Light light;
+        light.position = toGlmVec3(body.position);
+        light.intensity = static_cast<float>(body.radius * body.radius);
+
+        lightManager.addLight(light);
+    }
+
+    for (const Body& body : bodies){
+        if (!body.alive){
+            continue;
+        }
 
         glm::vec3 position = toGlmVec3(body.position);
-
         glm::vec3 color = toGlmVec3(body.color);
 
         if (body.type == BodyType::Star){
             renderSphere(sphere, starShader, position, static_cast<float>(body.radius), color);
         }
         else if (body.type == BodyType::Planet){
+            const auto relevantLights = lightManager.getRelevantLights(position, 1);
+
+            planetShader.setInt("lightCount", static_cast<int>(relevantLights.size()));
+
+            for (std::size_t i = 0; i < relevantLights.size(); ++i){
+                const Light& light = lightManager.getLight(relevantLights[i]);
+
+                planetShader.setVec3("lights[" + std::to_string(i) + "].position", light.position);
+                planetShader.setFloat("lights[" + std::to_string(i) + "].intensity", light.intensity);
+            }
+
             renderSphere(sphere, planetShader, position, static_cast<float>(body.radius), color);
         }
     }

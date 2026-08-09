@@ -31,6 +31,13 @@ struct CameraConfig {
     float mouseSensitivity;
 };
 
+struct LightningConfig{
+    float cellSize;
+    float softening;
+    float threshold;
+    int intensityScale;
+};
+
 class Config {
     public:
         static SimulationConfig simulation;
@@ -38,6 +45,7 @@ class Config {
         static OctreeConfig octree;
         static WindowConfig window;
         static CameraConfig camera;
+        static LightningConfig lightning;
 
         static void load(const std::string& path);
 };
