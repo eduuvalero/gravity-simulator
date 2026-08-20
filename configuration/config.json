@@ -1,0 +1,38 @@
+{
+    "simulation": {
+        "dt": 0.05,
+        "inputData": "assets/data/input.csv"
+    },
+
+    "physics": {
+        "gravitationalConstant": 1.0,
+        "softening": 0.001,
+        "barnesHutTheta": 0.5
+    },
+
+    "octree": {
+        "capacity": 16,
+        "minimumHalfWidth": 1e-16
+    },
+
+    "window": {
+        "width": 1920,
+        "height": 1080,
+        "title": "Gravity Simulator",
+        "vsync": true
+    },
+
+    "camera": {
+        "position": [0.0, 0.0, 3000.0],
+        "moveSpeed": 500.0,
+        "mouseSensitivity": 0.002,
+        "renderDistance": 10000.0
+    },
+
+    "lightning": {
+        "cellSize": 200.0,
+        "softening": 0.001,
+        "threshold": 0.001,
+        "intensityScale": 60.0
+    }
+}

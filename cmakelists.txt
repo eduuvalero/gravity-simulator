@@ -1,0 +1,174 @@
+cmake_minimum_required(VERSION 3.60)
+
+project(GravitySimulator)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+if(EMSCRIPTEN)
+    add_executable(GravitySimulator
+        src/web.cpp
+
+        src/engine/Gravity.cpp
+        src/engine/Integrator.cpp
+        src/engine/OctreeNode.cpp
+        src/engine/Collisions.cpp
+        src/engine/Physics.cpp
+
+        src/graphics/Window.cpp
+        src/graphics/Shader.cpp
+        src/graphics/VertexBuffer.cpp
+        src/graphics/VertexArray.cpp
+        src/graphics/IndexBuffer.cpp
+        src/graphics/Mesh.cpp
+        src/graphics/Renderer.cpp
+        src/graphics/Camera.cpp
+        src/graphics/Input.cpp
+        src/graphics/CameraController.cpp
+        src/graphics/SphereMesh.cpp
+        src/graphics/LightManager.cpp
+        src/graphics/LightGrid.cpp
+
+        src/io/CSVImporter.cpp
+        src/config/Config.cpp
+    )
+else()
+    add_executable(GravitySimulator
+        src/main.cpp
+        src/glad.c
+
+        src/engine/Gravity.cpp
+        src/engine/Integrator.cpp
+        src/engine/OctreeNode.cpp
+        src/engine/Collisions.cpp
+        src/engine/Physics.cpp
+
+        src/graphics/Window.cpp
+        src/graphics/Shader.cpp
+        src/graphics/VertexBuffer.cpp
+        src/graphics/VertexArray.cpp
+        src/graphics/IndexBuffer.cpp
+        src/graphics/Mesh.cpp
+        src/graphics/Renderer.cpp
+        src/graphics/Camera.cpp
+        src/graphics/Input.cpp
+        src/graphics/CameraController.cpp
+        src/graphics/SphereMesh.cpp
+        src/graphics/LightManager.cpp
+        src/graphics/LightGrid.cpp
+
+        src/io/CSVImporter.cpp
+        src/config/Config.cpp
+    )
+
+endif()
+
+target_include_directories(GravitySimulator PRIVATE
+    include
+)
+
+include(FetchContent)
+
+if(EMSCRIPTEN)
+    set(GLFW_BUILD_WAYLAND OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_X11 OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+
+else()
+    if(MSVC)
+        target_compile_options(GravitySimulator PRIVATE
+            $<$<CONFIG:Debug>:/Od>
+            $<$<CONFIG:Release>:/O2>
+        )
+    else()
+        target_compile_options(GravitySimulator PRIVATE
+            $<$<CONFIG:Debug>:-O0 -g>
+            $<$<CONFIG:Release>:-O3 -march=native>
+        )
+    endif()
+
+endif()
+
+FetchContent_Declare(
+    json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.12.0
+)
+
+FetchContent_Declare(
+    glm
+    GIT_REPOSITORY https://github.com/g-truc/glm.git
+    GIT_TAG 1.0.1
+)
+
+if(NOT EMSCRIPTEN)
+    FetchContent_Declare(
+        glfw
+        GIT_REPOSITORY https://github.com/glfw/glfw.git
+        GIT_TAG 3.4
+    )
+
+endif()
+
+FetchContent_MakeAvailable(
+    json
+    glm
+)
+
+if(NOT EMSCRIPTEN)
+    FetchContent_MakeAvailable(glfw)
+endif()
+
+if(EMSCRIPTEN)
+    set_target_properties(GravitySimulator PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/web"
+    )
+
+    file(GLOB_RECURSE WEB_ASSETS CONFIGURE_DEPENDS
+        "${CMAKE_SOURCE_DIR}/assets/*"
+    )
+
+    set_property(TARGET GravitySimulator APPEND PROPERTY LINK_DEPENDS
+        "${CMAKE_SOURCE_DIR}/configuration/config.json"
+        ${WEB_ASSETS}
+    )
+    target_link_options(GravitySimulator PRIVATE
+        "-sUSE_GLFW=3"
+        "-sMIN_WEBGL_VERSION=2"
+        "-sMAX_WEBGL_VERSION=2"
+        "-sALLOW_MEMORY_GROWTH=1"
+        "-sASSERTIONS=1"
+        "-sNO_DISABLE_EXCEPTION_CATCHING"
+
+        "--preload-file=${CMAKE_SOURCE_DIR}/configuration/config.json@/configuration/config.json"
+        "--preload-file=${CMAKE_SOURCE_DIR}/assets/shaders@/assets/shaders"
+        "--preload-file=${CMAKE_SOURCE_DIR}/assets/data/input_web.csv@/assets/data/input_web.csv"
+    )
+
+else()
+    find_package(OpenGL REQUIRED)
+    find_package(OpenMP COMPONENTS CXX)
+
+    if(OpenMP_CXX_FOUND)
+        target_link_libraries(GravitySimulator PRIVATE
+            OpenMP::OpenMP_CXX
+        )
+    endif()
+
+endif()
+
+target_link_libraries(GravitySimulator PRIVATE
+    nlohmann_json::nlohmann_json
+    glm
+)
+
+if(NOT EMSCRIPTEN)
+    target_link_libraries(GravitySimulator PRIVATE
+        glfw
+        OpenGL::GL
+    )
+endif()
